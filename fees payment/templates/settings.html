@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | Maconte School</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="dashboard-page">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">M</div>
+            <div>
+                <h2>MACONTE</h2>
+                <p>School Management</p>
+            </div>
+        </div>
+
+        <p class="menu-heading">MAIN MENU</p>
+
+        <nav class="sidebar-nav">
+            <a class="nav-link" href="{{ url_for('dashboard') }}">
+                <span>▦</span> Dashboard
+            </a>
+            <a class="nav-link" href="{{ url_for('students') }}">
+                <span>♙</span> Students
+            </a>
+            <a class="nav-link" href="{{ url_for('payments') }}">
+                <span>▤</span> Fee Payments
+            </a>
+            <a class="nav-link" href="{{ url_for('reports') }}">
+                <span>▥</span> Reports
+            </a>
+            <a class="nav-link active" href="{{ url_for('settings') }}">
+                <span>⚙</span> Settings
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <p>Logged in as</p>
+            <strong>{{ session.get('full_name', 'Administrator') }}</strong>
+            <a class="logout-link" href="{{ url_for('logout') }}">
+                ↪ Logout
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <p class="breadcrumb">MACONTE SCHOOL / CONFIGURATION</p>
+                <h1>Settings</h1>
+            </div>
+
+            <div class="profile">
+                <div class="profile-avatar">S</div>
+                <div>
+                    <strong>{{ session.get('full_name', 'Administrator') }}</strong>
+                    <p>System Administrator</p>
+                </div>
+            </div>
+        </header>
+
+        <section class="welcome-banner">
+            <div>
+                <p class="welcome-label">SYSTEM CONFIGURATION</p>
+                <h2>School Settings</h2>
+                <p>Manage your school's basic information and review system details.</p>
+            </div>
+            <div class="welcome-symbol">⚙</div>
+        </section>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <section class="panel">
+            <div class="panel-heading">
+                <div>
+                    <h2>School Information</h2>
+                    <p>Update the information displayed by the system.</p>
+                </div>
+            </div>
+
+            <form method="POST" action="{{ url_for('settings') }}">
+                <div class="form-grid">
+
+                    <div>
+                        <label for="school_name">School Name</label>
+                        <input type="text" id="school_name"
+                               name="school_name"
+                               value="{{ school_name }}"
+                               maxlength="150" required>
+                    </div>
+
+                    <div>
+                        <label for="school_email">School Email</label>
+                        <input type="email" id="school_email"
+                               name="school_email"
+                               value="{{ school_email }}"
+                               maxlength="150"
+                               placeholder="school@example.com">
+                    </div>
+
+                    <div>
+                        <label for="school_phone">School Phone</label>
+                        <input type="tel" id="school_phone"
+                               name="school_phone"
+                               value="{{ school_phone }}"
+                               maxlength="30"
+                               placeholder="Enter school phone number">
+                    </div>
+
+                    <div>
+                        <label for="school_address">School Address</label>
+                        <input type="text" id="school_address"
+                               name="school_address"
+                               value="{{ school_address }}"
+                               maxlength="255"
+                               placeholder="Enter school address">
+                    </div>
+
+                </div>
+
+                <button type="submit">Save Settings</button>
+            </form>
+        </section>
+
+        <section class="panel">
+            <div class="panel-heading">
+                <div>
+                    <h2>System Information</h2>
+                    <p>Technical details about your application.</p>
+                </div>
+            </div>
+
+            <div class="system-row">
+                <span>Application</span>
+                <strong>Maconte School Fees Management</strong>
+            </div>
+
+            <div class="system-row">
+                <span>Database</span>
+                <strong>MySQL</strong>
+            </div>
+
+            <div class="system-row">
+                <span>Framework</span>
+                <strong>Python Flask</strong>
+            </div>
+
+            <div class="system-row">
+                <span>Current User</span>
+                <strong>{{ session.get('username', 'Administrator') }}</strong>
+            </div>
+
+            <div class="system-row">
+                <span>Authentication</span>
+                <strong class="online">Active</strong>
+            </div>
+        </section>
+
+        <footer class="dashboard-footer">
+            <p>© 2026 Maconte School | School Fees Payment Management System</p>
+        </footer>
+
+    </main>
+</body>
+</html>

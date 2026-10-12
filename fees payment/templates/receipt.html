@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Receipt - Maconte School</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f4f6;
+            color: #222;
+            margin: 0;
+            padding: 30px 15px;
+        }
+
+        .receipt {
+            max-width: 650px;
+            margin: auto;
+            padding: 35px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .school-header {
+            text-align: center;
+            border-bottom: 2px solid #1d4ed8;
+            padding-bottom: 18px;
+        }
+
+        .school-header h1 {
+            color: #1d4ed8;
+            margin-bottom: 5px;
+        }
+
+        .receipt-title {
+            text-align: center;
+            margin: 25px 0;
+        }
+
+        .details {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .details td {
+            padding: 12px 5px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .details td:first-child {
+            font-weight: bold;
+            width: 45%;
+        }
+
+        .amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #15803d;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .actions {
+            text-align: center;
+            margin: 20px;
+        }
+
+        button, .back-link {
+            padding: 11px 18px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background: #1d4ed8;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .receipt {
+                border: none;
+                border-radius: 0;
+                padding: 10px;
+            }
+
+            .actions {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="receipt">
+        <div class="school-header">
+            <h1>Maconte School</h1>
+            <p>School Fees Payment Receipt</p>
+        </div>
+
+        <div class="receipt-title">
+            <h2>PAYMENT RECEIPT</h2>
+            <p>Receipt No: RCP-{{ payment.payment_id }}</p>
+        </div>
+
+        <table class="details">
+            <tr>
+                <td>Student Name</td>
+                <td>{{ payment.first_name }} {{ payment.last_name }}</td>
+            </tr>
+            <tr>
+                <td>Student ID</td>
+                <td>{{ payment.student_id }}</td>
+            </tr>
+            <tr>
+                <td>Class</td>
+                <td>{{ payment.class_name }}</td>
+            </tr>
+            <tr>
+                <td>Payment Date</td>
+                <td>{{ payment.payment_date }}</td>
+            </tr>
+            <tr>
+                <td>Term</td>
+                <td>{{ payment.term }}</td>
+            </tr>
+            <tr>
+                <td>Payment Method</td>
+                <td>{{ payment.payment_method }}</td>
+            </tr>
+            <tr>
+                <td>Reference Number</td>
+                <td>{{ payment.reference_number or "N/A" }}</td>
+            </tr>
+            <tr>
+                <td>Amount Received</td>
+                <td class="amount">
+                    ${{ "%.2f"|format(payment.amount) }}
+                </td>
+                
+            </tr>
+            <tr>
+                <td>Total Paid This Term</td>
+                <td>${{ "%.2f"|format(payment.total_paid) }}</td>
+            </tr>
+            <tr>
+                <td>Outstanding Balance</td>
+                <td>${{ "%.2f"|format(payment.outstanding) }}</td>
+                
+             
+            </tr>
+        </table>
+
+        <div class="footer">
+            <p>Thank you for your payment.</p>
+            <p>Please keep this receipt for your records.</p>
+            <p>Maconte School — School Fees Management System</p>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button onclick="window.print()">Print / Save as PDF</button>
+
+        <a href="{{ url_for('payments') }}" class="back-link">
+            Back to Payments
+        </a>
+    </div>
+</body>
+</html>

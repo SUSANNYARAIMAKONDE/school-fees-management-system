@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Maconte School</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="dashboard-page">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">M</div>
+            <div>
+                <h2>MACONTE</h2>
+                <p>School Management</p>
+            </div>
+        </div>
+
+        <p class="menu-heading">MAIN MENU</p>
+
+        <nav class="sidebar-nav">
+            <a class="nav-link active" href="{{ url_for('dashboard') }}">
+                <span>▦</span> Dashboard
+            </a>
+            <a class="nav-link" href="{{ url_for('students') }}">
+                <span>♙</span> Students
+            </a>
+            <a class="nav-link" href="{{ url_for('payments') }}">
+                <span>▤</span> Fee Payments
+            </a>
+            <a class="nav-link" href="{{ url_for('reports') }}">
+                <span>▥</span> Reports
+            </a>
+            <a class="nav-link" href="{{ url_for('settings') }}">
+                <span>⚙</span> Settings
+            </a>
+           
+           <a class="nav-link" href="{{ url_for('outstanding_fees') }}">
+               <span>$</span> Outstanding Fees
+
+           
+          <a class="nav-link" href="{{ url_for('student_statement') }}">
+              <span>▤</span> Student Fee Statement
+</a>    
+</a>
+</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <p>Logged in as</p>
+            <strong>{{ session.get('full_name', 'Administrator') }}</strong>
+            <a class="logout-link" href="{{ url_for('logout') }}">
+                ↪ Logout
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div>
+                <p class="breadcrumb">MACONTE SCHOOL / OVERVIEW</p>
+                <h1>Dashboard</h1>
+            </div>
+            <div class="profile">
+                <div class="profile-avatar">S</div>
+                <div>
+                    <strong>{{ session.get('full_name', 'Administrator') }}</strong>
+                    <p>System Administrator</p>
+                </div>
+            </div>
+        </header>
+
+        <section class="welcome-banner">
+            <div>
+                <p class="welcome-label">SCHOOL ADMINISTRATION</p>
+                <h2>Welcome back, {{ session.get('full_name', 'Susan') }}!</h2>
+                <p>Manage student records, fee collections and school payment information in one place.</p>
+            </div>
+            <div class="welcome-symbol">M</div>
+        </section>
+
+        <section class="section-heading">
+            <div>
+                <h2>School Overview</h2>
+                <p>Your key school fee management indicators</p>
+            </div>
+            <span class="status-pill">● System Online</span>
+        </section>
+
+        <section class="stats-grid">
+            <article class="stat-card">
+                <div class="stat-icon blue">♙</div>
+                <p>Total Students</p>
+                <h3>{{ total_students|default(0) }}</h3>
+                <span>Registered students</span>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-icon green">$</div>
+                <p>Total Fees Collected</p>
+                <h3>${{ "%.2f"|format(total_collected|default(0)|float) }}</h3>
+                <span>Recorded payments</span>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-icon orange">▤</div>
+                <p>Outstanding Fees</p>
+                <h3>${{ "%.2f"|format(outstanding_fees|default(0)|float) }}</h3>
+                <span>Remaining balances</span>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-icon purple">✓</div>
+                <p>Payments Today</p>
+                <h3>{{ payments_today|default(0) }}</h3>
+                <span>Transactions recorded today</span>
+            </article>
+        </section>
+
+        <section class="content-grid">
+            <article class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Quick Actions</h2>
+                        <p>Common administrative tasks</p>
+                    </div>
+                </div>
+
+                <div class="actions-grid">
+                    <a href="{{ url_for('students') }}" class="action-card">
+                        <span class="action-icon blue">＋</span>
+                        <strong>Register Student</strong>
+                        <small>Add a new student record</small>
+                    </a>
+
+                    <a href="{{ url_for('payments') }}" class="action-card">
+                        <span class="action-icon green">$</span>
+                        <strong>Record Payment</strong>
+                        <small>Capture a fee payment</small>
+                    </a>
+
+                    <a href="{{ url_for('students') }}" class="action-card">
+                        <span class="action-icon purple">⌕</span>
+                        <strong>Find Student</strong>
+                        <small>Locate student information</small>
+                    </a>
+
+                    <a href="{{ url_for('reports') }}" class="action-card">
+                        <span class="action-icon orange">▥</span>
+                        <strong>Generate Report</strong>
+                        <small>Review school fee records</small>
+                    </a>
+                </div>
+            </article>
+
+            <article class="panel system-panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>System Information</h2>
+                        <p>Application status</p>
+                    </div>
+                </div>
+
+                <div class="system-row">
+                    <span>Application</span>
+                    <strong>Mac onte Fees</strong>
+                </div>
+                <div class="system-row">
+                    <span>Database</span>
+                    <strong>MySQL</strong>
+                </div>
+                <div class="system-row">
+                    <span>Authentication</span>
+                    <strong class="online">Active</strong>
+                </div>
+                <div class="system-row">
+                    <span>Current User</span>
+                    <strong>{{ session.get('username', 'admin') }}</strong>
+                </div>
+            </article>
+        </section>
+
+        <footer class="dashboard-footer">
+            <p>© 2026 Maconte School | School Fees Payment Management System</p>
+        </footer>
+    </main>
+
+</body>
+</html>

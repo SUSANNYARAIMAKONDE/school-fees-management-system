@@ -1,0 +1,248 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Fee Statement | Maconte School</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 25px;
+            color: #263238;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .panel {
+            background: white;
+            padding: 22px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #00000012;
+        }
+
+        h1, h2 {
+            color: #17365d;
+        }
+
+        select, button {
+            padding: 11px;
+            border-radius: 5px;
+            margin-top: 8px;
+        }
+
+        select {
+            border: 1px solid #ccd2d8;
+            min-width: 240px;
+        }
+
+        button {
+            background: #17365d;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .amount {
+            font-size: 23px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th {
+            background: #17365d;
+            color: white;
+        }
+
+        .owing {
+            color: #b42318;
+        }
+
+        .message {
+            background: #e8f4ea;
+            padding: 12px;
+            border-radius: 5px;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            .panel {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <div class="no-print">
+        <a href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
+    </div>
+
+    <h1>Maconte School</h1>
+    <h2>Student Fee Statement</h2>
+
+    <div class="panel no-print">
+        <form method="GET" action="{{ url_for('student_statement') }}">
+            <label for="student_id">Select student:</label>
+            <select name="student_id" id="student_id" required>
+                <option value="">Choose a student</option>
+
+                {% for student in students %}
+                    <option value="{{ student.student_id }}"
+                        {% if selected_student and
+                              selected_student.student_id == student.student_id %}
+                            selected
+                        {% endif %}>
+                        {{ student.first_name }} {{ student.last_name }}
+                        ({{ student.class_name }})
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">View Statement</button>
+        </form>
+    </div>
+
+    {% if selected_student %}
+        <div class="panel">
+            <h2>Student Information</h2>
+            <p><strong>Student ID:</strong> {{ selected_student.student_id }}</p>
+            <p><strong>Name:</strong> {{ selected_student.first_name }}
+                {{ selected_student.last_name }}</p>
+            <p><strong>Class:</strong> {{ selected_student.class_name }}</p>
+        </div>
+
+        <div class="summary">
+            <div class="panel">
+                <div>Total Expected Fees</div>
+                <div class="amount">
+                    ${{ "%.2f"|format(total_due) }}
+                </div>
+            </div>
+
+            <div class="panel">
+                <div>Total Payments</div>
+                <div class="amount">
+                    ${{ "%.2f"|format(total_paid) }}
+                </div>
+            </div>
+
+            <div class="panel">
+                <div>Outstanding Balance</div>
+                <div class="amount owing">
+                    ${{ "%.2f"|format(total_outstanding) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>Expected Fees by Term</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Academic Year</th>
+                            <th>Term</th>
+                            <th>Expected ($)</th>
+                            <th>Paid ($)</th>
+                            <th>Outstanding ($)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for fee in fee_records %}
+                        <tr>
+                            <td>{{ fee.academic_year }}</td>
+                            <td>{{ fee.term }}</td>
+                            <td>{{ "%.2f"|format(fee.amount_due) }}</td>
+                            <td>{{ "%.2f"|format(fee.total_paid) }}</td>
+                            <td>{{ "%.2f"|format(fee.outstanding) }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5">No expected fees recorded for this student.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>Payment History</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Payment Date</th>
+                            <th>Term</th>
+                            <th>Amount ($)</th>
+                            <th>Payment Method</th>
+                            <th>Reference</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for payment in payment_records %}
+                        <tr>
+                            <td>{{ payment.payment_date }}</td>
+                            <td>{{ payment.term }}</td>
+                            <td>{{ "%.2f"|format(payment.amount) }}</td>
+                            <td>{{ payment.payment_method }}</td>
+                            <td>{{ payment.reference_number or "-" }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5">No payments recorded for this student.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="no-print">
+            <button onclick="window.print()">Print / Save as PDF</button>
+        </div>
+    {% endif %}
+
+</div>
+</body>
+</html>

@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports | Maconte School</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="dashboard-page">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">M</div>
+            <div>
+                <h2>MACONTE</h2>
+                <p>School Management</p>
+            </div>
+        </div>
+
+        <p class="menu-heading">MAIN MENU</p>
+
+        <nav class="sidebar-nav">
+            <a class="nav-link" href="{{ url_for('dashboard') }}">
+                <span>▦</span> Dashboard
+            </a>
+            <a class="nav-link" href="{{ url_for('students') }}">
+                <span>♙</span> Students
+            </a>
+            <a class="nav-link" href="{{ url_for('payments') }}">
+                <span>▤</span> Fee Payments
+            </a>
+            <a class="nav-link active" href="{{ url_for('reports') }}">
+                <span>▥</span> Reports
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <p>Logged in as</p>
+            <strong>{{ session.get('full_name', 'Administrator') }}</strong>
+            <a class="logout-link" href="{{ url_for('logout') }}">
+                ↪ Logout
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <p class="breadcrumb">MACONTE SCHOOL / REPORTING</p>
+                <h1>Reports</h1>
+            </div>
+
+            <div class="profile">
+                <div class="profile-avatar">S</div>
+                <div>
+                    <strong>{{ session.get('full_name', 'Administrator') }}</strong>
+                    <p>System Administrator</p>
+                </div>
+            </div>
+        </header>
+
+        <section class="welcome-banner">
+            <div>
+                <p class="welcome-label">SCHOOL FINANCE ANALYTICS</p>
+                <h2>Financial Reports</h2>
+                <p>Review student registrations, fee collections and payment activity.</p>
+            </div>
+            <div class="welcome-symbol">▥</div>
+        </section>
+
+        <section class="stats-grid">
+            <article class="stat-card">
+                <div class="stat-icon blue">♙</div>
+                <p>Registered Students</p>
+                <h3>{{ total_students|default(0) }}</h3>
+                <span>Total student records</span>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-icon green">$</div>
+                <p>Total Collected</p>
+                <h3>${{ "%.2f"|format(total_collected|default(0)|float) }}</h3>
+                <span>All recorded payments</span>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-icon purple">▤</div>
+                <p>Transactions</p>
+                <h3>{{ payment_count|default(0) }}</h3>
+                <span>Payment records</span>
+            </article>
+        </section>
+
+        <section class="panel">
+            <div class="panel-heading">
+                <div>
+                    <h2>Payment Report</h2>
+                    <p>Filter transactions by date to review collections.</p>
+                </div>
+            </div>
+
+            <form method="GET" action="{{ url_for('reports') }}">
+                <div class="form-grid">
+                    <div>
+                        <label for="start_date">Start Date</label>
+                        <input type="date" id="start_date" name="start_date"
+                               value="{{ start_date|default('') }}">
+                    </div>
+
+                    <div>
+                        <label for="end_date">End Date</label>
+                        <input type="date" id="end_date" name="end_date"
+                               value="{{ end_date|default('') }}">
+                    </div>
+                </div>
+
+                <button type="submit">Generate Report</button>
+                <a href="{{ url_for('reports') }}">Clear Filters</a>
+            </form>
+        </section>
+
+        <section class="panel">
+            <div class="panel-heading">
+                <div>
+                    <h2>Payment Transactions</h2>
+                    <p>Transactions matching your selected dates.</p>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Payment ID</th>
+                            <th>Student</th>
+                            <th>Class</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Method</th>
+                            <th>Term</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for payment in payments|default([]) %}
+                        <tr>
+                            <td>{{ payment.payment_id }}</td>
+                            <td>{{ payment.first_name }} {{ payment.last_name }}</td>
+                            <td>{{ payment.class_name }}</td>
+                            <td>${{ "%.2f"|format(payment.amount|float) }}</td>
+                            <td>{{ payment.payment_date }}</td>
+                            <td>{{ payment.payment_method }}</td>
+                            <td>{{ payment.term }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="7">No transactions found for this period.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="system-row">
+                <span>Total for selected period</span>
+                <strong>${{ "%.2f"|format(period_total|default(0)|float) }}</strong>
+            </div>
+        </section>
+
+        <footer class="dashboard-footer">
+            <p>© 2026 Maconte School | School Fees Payment Management System</p>
+        </footer>
+
+    </main>
+</body>
+</html>

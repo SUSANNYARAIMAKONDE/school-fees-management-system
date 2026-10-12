@@ -1,0 +1,627 @@
+
+/* Basic styling for the whole page */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    color: #333333;
+    background-color: #f1f4f8;
+}
+
+/* Centre the login form on the screen */
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* The white box containing the login form */
+.login-container {
+    background-color: white;
+    width: 100%;
+    max-width: 420px;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+/* School heading */
+.login-container h1 {
+    text-align: center;
+    color: #17365d;
+    margin-bottom: 8px;
+}
+
+/* Description under the school name */
+.subtitle {
+    text-align: center;
+    color: #666666;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Login heading */
+.login-container h2 {
+    margin-top: 30px;
+    font-size: 20px;
+}
+
+/* Form labels */
+label {
+    display: block;
+    margin-top: 18px;
+    margin-bottom: 7px;
+    font-weight: bold;
+}
+
+/* Username and password fields */
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 15px;
+}
+
+/* Highlight the field currently being used */
+input:focus {
+    outline: none;
+    border-color: #17365d;
+    box-shadow: 0 0 4px rgba(23, 54, 93, 0.2);
+}
+
+/* Login button */
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 25px;
+    background-color: #17365d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Change the button colour when hovered over */
+button:hover {
+    background-color: #24558a;
+}
+
+/* Login error messages */
+.error-message {
+    padding: 10px;
+    color: #a61b1b;
+    background-color: #fdeaea;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Text at the bottom of the form */
+.footer-text {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 12px;
+    color: #777777;
+}
+
+/* MACONTE SCHOOL DASHBOARD */
+
+* {
+    box-sizing: border-box;
+}
+
+body.dashboard-page {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f4f7fb;
+    color: #172033;
+}
+
+.dashboard-page a {
+    text-decoration: none;
+}
+
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #142544;
+    color: #fff;
+    padding: 28px 18px;
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 5px 30px;
+}
+
+.brand-icon {
+    width: 44px;
+    height: 44px;
+    background: #3b82f6;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.brand h2 {
+    margin: 0;
+    font-size: 19px;
+    letter-spacing: 1px;
+}
+
+.brand p {
+    margin: 5px 0 0;
+    font-size: 11px;
+    color: #b8c6dc;
+}
+
+.menu-heading {
+    color: #91a3c0;
+    font-size: 11px;
+    letter-spacing: 1.4px;
+    margin: 12px 10px;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 14px 13px;
+    border-radius: 9px;
+    color: #cbd5e1;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.nav-link span {
+    width: 22px;
+    font-size: 19px;
+    text-align: center;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: white;
+    background: #2b4167;
+}
+
+.nav-link.active {
+    border-left: 3px solid #60a5fa;
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+    padding: 18px 10px 0;
+    border-top: 1px solid #344563;
+}
+
+.sidebar-bottom p {
+    color: #9eafc8;
+    font-size: 12px;
+    margin: 0 0 7px;
+}
+
+.sidebar-bottom strong {
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.logout-link {
+    display: block;
+    color: #fca5a5;
+    margin-top: 22px;
+    font-size: 14px;
+}
+
+.main-content {
+    margin-left: 250px;
+    padding: 30px;
+    min-height: 100vh;
+}
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.breadcrumb {
+    font-size: 10px;
+    letter-spacing: 1.2px;
+    color: #718096;
+    margin: 0 0 8px;
+}
+
+.topbar h1 {
+    font-size: 28px;
+    margin: 0;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.profile-avatar {
+    width: 43px;
+    height: 43px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-weight: 800;
+}
+
+.profile strong {
+    font-size: 13px;
+}
+
+.profile p {
+    margin: 4px 0 0;
+    color: #718096;
+    font-size: 12px;
+}
+
+.welcome-banner {
+    background: linear-gradient(115deg, #1d3765, #2856a0);
+    color: white;
+    padding: 28px 30px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.welcome-label {
+    color: #bfdbfe;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+}
+
+.welcome-banner h2 {
+    font-size: 25px;
+    margin: 12px 0;
+}
+
+.welcome-banner p:last-child {
+    color: #e0eaff;
+    font-size: 13px;
+    line-height: 1.7;
+    max-width: 550px;
+}
+
+.welcome-symbol {
+    min-width: 95px;
+    height: 95px;
+    border-radius: 25px;
+    display: grid;
+    place-items: center;
+    background: #ffffff18;
+    color: #ffffffaa;
+    font-size: 55px;
+    font-weight: 800;
+}
+
+.section-heading,
+.panel-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.section-heading {
+    margin-bottom: 17px;
+}
+
+.section-heading h2,
+.panel-heading h2 {
+    font-size: 17px;
+    margin: 0 0 6px;
+}
+
+.section-heading p,
+.panel-heading p {
+    margin: 0;
+    color: #7b8799;
+    font-size: 12px;
+}
+
+.status-pill {
+    color: #15803d;
+    background: #dcfce7;
+    border-radius: 20px;
+    padding: 8px 12px;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 17px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background: white;
+    border: 1px solid #e8edf5;
+    border-radius: 13px;
+    padding: 20px;
+    box-shadow: 0 3px 12px #15274405;
+}
+
+.stat-icon,
+.action-icon {
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    border-radius: 10px;
+}
+
+.stat-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 21px;
+    margin-bottom: 17px;
+}
+
+.blue {
+    color: #2563eb;
+    background: #dbeafe;
+}
+
+.green {
+    color: #15803d;
+    background: #dcfce7;
+}
+
+.orange {
+    color: #c2410c;
+    background: #ffedd5;
+}
+
+.purple {
+    color: #7c3aed;
+    background: #ede9fe;
+}
+
+.stat-card p {
+    font-size: 12px;
+    color: #68758a;
+    margin: 0 0 9px;
+}
+
+.stat-card h3 {
+    font-size: 25px;
+    margin: 0 0 9px;
+    overflow-wrap: anywhere;
+}
+
+.stat-card > span {
+    font-size: 11px;
+    color: #8490a2;
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(250px, 1fr);
+    gap: 20px;
+}
+
+.panel {
+    background: white;
+    border: 1px solid #e8edf5;
+    border-radius: 13px;
+    padding: 23px;
+    min-width: 0;
+}
+
+.panel-heading {
+    margin-bottom: 23px;
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 13px;
+}
+
+.action-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border: 1px solid #e8edf5;
+    border-radius: 10px;
+    padding: 16px;
+    color: #172033;
+    transition: 0.2s;
+}
+
+.action-card:hover {
+    border-color: #93b4ef;
+    background: #f8faff;
+    transform: translateY(-2px);
+}
+
+.action-icon {
+    width: 37px;
+    height: 37px;
+    font-size: 20px;
+    margin-bottom: 13px;
+}
+
+.action-card strong {
+    font-size: 12px;
+    margin-bottom: 7px;
+}
+
+.action-card small {
+    color: #7b8799;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.system-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 0;
+    border-bottom: 1px solid #edf0f5;
+    font-size: 12px;
+}
+
+.system-row:last-child {
+    border-bottom: none;
+}
+
+.system-row span {
+    color: #718096;
+}
+
+.system-row strong {
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.online {
+    color: #15803d;
+}
+
+.dashboard-footer {
+    text-align: center;
+    padding: 25px 0 5px;
+    color: #8994a5;
+    font-size: 11px;
+}
+
+@media (max-width: 1100px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 15px;
+    }
+
+    .brand {
+        padding-bottom: 12px;
+    }
+
+    .menu-heading,
+    .sidebar-bottom {
+        display: none;
+    }
+
+    .sidebar-nav {
+        flex-direction: row;
+        overflow-x: auto;
+    }
+
+    .nav-link {
+        flex-shrink: 0;
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 18px;
+    }
+
+    .topbar {
+        align-items: flex-start;
+    }
+
+    .topbar h1 {
+        font-size: 23px;
+    }
+
+    .profile {
+        max-width: 45%;
+    }
+
+    .profile strong {
+        overflow-wrap: anywhere;
+    }
+
+    .welcome-banner {
+        padding: 22px;
+    }
+
+    .welcome-banner h2 {
+        font-size: 20px;
+    }
+
+    .welcome-symbol {
+        display: none;
+    }
+
+    .stats-grid {
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 14px;
+    }
+
+    .stat-card h3 {
+        font-size: 21px;
+    }
+
+    .actions-grid {
+        grid-template-columns: 1fr;
+    }
+}
+body.dashboard-page {
+    background: #e0f2fe !important;
+}
+
+.main-content {
+    margin-left: 250px !important;
+    padding: 30px !important;
+}
+
+.sidebar {
+    background: #142544 !important;
+    color: white !important;
+}

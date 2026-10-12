@@ -1,0 +1,297 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Payments | Maconte School</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="dashboard-page">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">M</div>
+            <div>
+                <h2>MACONTE</h2>
+                <p>School Management</p>
+            </div>
+        </div>
+
+        <p class="menu-heading">MAIN MENU</p>
+
+        <nav class="sidebar-nav">
+            <a class="nav-link" href="{{ url_for('dashboard') }}">
+                <span>▦</span> Dashboard
+            </a>
+
+            <a class="nav-link" href="{{ url_for('students') }}">
+                <span>♙</span> Students
+            </a>
+
+            <a class="nav-link active" href="{{ url_for('payments') }}">
+                <span>▤</span> Fee Payments
+            </a>
+
+            <a class="nav-link" href="{{ url_for('reports') }}">
+                <span>▥</span> Reports
+            </a>
+
+            <a class="nav-link" href="{{ url_for('settings') }}">
+                <span>⚙</span> Settings
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <p>Logged in as</p>
+            <strong>{{ session.get('full_name', 'Administrator') }}</strong>
+            <a class="logout-link" href="{{ url_for('logout') }}">
+                ↪ Logout
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <p class="breadcrumb">MACONTE SCHOOL / FINANCE</p>
+                <h1>Fee Payments</h1>
+            </div>
+
+            <div class="profile">
+                <div class="profile-avatar">S</div>
+                <div>
+                    <strong>{{ session.get('full_name', 'Administrator') }}</strong>
+                    <p>System Administrator</p>
+                </div>
+            </div>
+        </header>
+
+        <section class="welcome-banner">
+            <div>
+                <p class="welcome-label">FINANCE MANAGEMENT</p>
+                <h2>School Fee Payments</h2>
+                <p>Record, monitor and manage student fee payments.</p>
+            </div>
+            <div class="welcome-symbol">$</div>
+        </section>
+
+        <section class="stats-grid">
+            <article class="stat-card">
+                <div class="stat-icon blue">$</div>
+                <p>Total Collected</p>
+                <h3>${{ "%.2f"|format(total_collected|default(0)|float) }}</h3>
+                <span>Payments received</span>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-icon green">✓</div>
+                <p>Transactions</p>
+                <h3>{{ payment_count|default(0) }}</h3>
+                <span>Recorded payments</span>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-icon orange">▤</div>
+                <p>Payment Methods</p>
+                <h3>3</h3>
+                <span>Cash, bank and mobile money</span>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-icon purple">⌕</div>
+                <p>Payment Records</p>
+                <h3>{{ payments|default([])|length }}</h3>
+                <span>Transactions displayed below</span>
+            </article>
+        </section>
+
+        
+<section class="panel">
+    <div class="panel-heading">
+        <div>
+            <h2>Recent Transactions</h2>
+            <p>Review payments recorded in the system.</p>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Payment ID</th>
+                    <th>Student</th>
+                    <th>Amount (USD)</th>
+                    <th>Date</th>
+                    <th>Method</th>
+                    <th>Reference</th>
+                    <th>Receipt</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for payment in payments|default([]) %}
+                <tr>
+                    <td>{{ payment.payment_id }}</td>
+
+                    <td>
+                        {{ payment.first_name }}
+                        {{ payment.last_name }}
+                    </td>
+
+                    <td>
+                        ${{ "%.2f"|format(payment.amount|float) }}
+                    </td>
+
+                    <td>{{ payment.payment_date }}</td>
+
+                    <td>{{ payment.payment_method }}</td>
+
+                    <td>{{ payment.reference_number or '-' }}</td>
+
+                    class="panel">
+            <div class="panel-heading">
+                <div>
+                    <h2>Record a Payment</h2>
+                    <p>Enter the details of the student's payment.</p>
+                </div>
+            </div>
+
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('payments') }}">
+                <div class="form-grid">
+
+                    <div>
+                        <label for="student_id">Student ID</label>
+                        <input type="number" id="student_id"
+                               name="student_id" min="1"
+                               placeholder="Enter student ID" required>
+                    </div>
+
+                    <div>
+                        <label for="amount">Amount Paid (USD)</label>
+                        <input type="number" id="amount" name="amount"
+                               min="0.01" step="0.01"
+                               placeholder="e.g. 150.00" required>
+                    </div>
+
+                    <div>
+                        <label for="payment_date">Payment Date</label>
+                        <input type="date" id="payment_date"
+                               name="payment_date" required>
+                    </div>
+
+                    <div>
+                        <label for="payment_method">Payment Method</label>
+                        <select id="payment_method" name="payment_method"
+                                required>
+                            <option value="">Select method</option>
+                            <option value="Cash">Cash</option>
+                            <option value="Bank Transfer">Bank Transfer</option>
+                            <option value="Mobile Money">Mobile Money</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="reference_number">Reference Number</label>
+                        <input type="text" id="reference_number"
+                               name="reference_number"
+                               placeholder="Optional transaction reference">
+                    </div>
+
+                    <div>
+                        <label for="term">School Term</label>
+                        <select id="term" name="term" required>
+                            <option value="">Select term</option>
+                            <option value="Term 1">Term 1</option>
+                            <option value="Term 2">Term 2</option>
+                            <option value="Term 3">Term 3</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <button type="submit">Record Payment</button>
+            </form>
+        </section>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7">
+                        No payment records to display yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+        <section class="panel">
+            <div class="panel-heading">
+                <div>
+                    <h2>Recent Transactions</h2>
+                    <p>Review payments recorded in the system.</p>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Payment ID</th>
+                            <th>Student</th>
+                            <th>Amount (USD)</th>
+                            <th>Date</th>
+                            <th>Method</th>
+                            <th>Reference</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for payment in payments|default([]) %}
+                        <tr>
+                            <td>{{ payment.payment_id }}</td>
+                            <td>{{ payment.first_name }} {{ payment.last_name }}</td>
+                            <td>${{ "%.2f"|format(payment.amount|float) }}</td>
+                            <td>{{ payment.payment_date }}</td>
+                            <td>{{ payment.payment_method }}</td>
+                            <td>{{ payment.reference_number or '-' }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6">
+                                No payment records to display yet.
+                            </td>
+                            
+<td>
+    <a href="{{ url_for('payment_receipt', payment_id=payment.payment_id) }}">
+        View Receipt
+    </a>
+</td>
+<th>Receipt</th>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer class="dashboard-footer">
+            <p>© 2026 Maconte School | School Fees Payment Management System</p>
+        </footer>
+
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,275 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outstanding Fees | Maconte School</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 25px;
+            color: #263238;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #17365d;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #00000012;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            border: 1px solid #ccd2d8;
+            border-radius: 5px;
+        }
+
+        button {
+            background: #17365d;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 18px;
+        }
+
+        button:hover {
+            background: #24558b;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .summary .card {
+            margin-bottom: 0;
+        }
+
+        .amount {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        th {
+            background: #17365d;
+            color: white;
+        }
+
+        .owing {
+            color: #b42318;
+            font-weight: bold;
+        }
+
+        .cleared {
+            color: #16803c;
+            font-weight: bold;
+        }
+
+        .message {
+            background: #e8f4ea;
+            padding: 12px;
+            margin-bottom: 12px;
+            border-radius: 5px;
+        }
+
+        a {
+            color: #17365d;
+            text-decoration: none;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <a class="back-link" href="{{ url_for('dashboard') }}">
+        &larr; Back to Dashboard
+    </a>
+
+    <h1>Outstanding Fees</h1>
+    <p>Manage expected school fees and monitor student balances.</p>
+
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <div class="card">
+        <h2>Record Expected Fees</h2>
+
+        <form method="POST" action="{{ url_for('outstanding_fees') }}">
+            <div class="form-grid">
+                <div>
+                    <label for="student_id">Student</label>
+                    <select id="student_id" name="student_id" required>
+                        <option value="">Select student</option>
+                        {% for student in students %}
+                            <option value="{{ student.student_id }}">
+                                {{ student.first_name }} {{ student.last_name }}
+                                — {{ student.class_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label for="term">Term</label>
+                    <select id="term" name="term" required>
+                        <option value="">Select term</option>
+                        <option value="Term 1">Term 1</option>
+                        <option value="Term 2">Term 2</option>
+                        <option value="Term 3">Term 3</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="academic_year">Academic Year</label>
+                    <input
+                        type="text"
+                        id="academic_year"
+                        name="academic_year"
+                        placeholder="e.g. 2026"
+                        required
+                        pattern="[0-9]{4}"
+                        title="Enter a four-digit year">
+                </div>
+
+                <div>
+                    <label for="amount_due">Expected Fees ($)</label>
+                    <input
+                        type="number"
+                        id="amount_due"
+                        name="amount_due"
+                        min="0.01"
+                        step="0.01"
+                        placeholder="e.g. 500.00"
+                        required>
+                </div>
+            </div>
+
+            <button type="submit">Save Expected Fees</button>
+        </form>
+    </div>
+
+    <div class="summary">
+        <div class="card">
+            <div>Total Expected</div>
+            <div class="amount">${{ "%.2f"|format(total_due) }}</div>
+        </div>
+
+        <div class="card">
+            <div>Total Paid</div>
+            <div class="amount">${{ "%.2f"|format(total_paid) }}</div>
+        </div>
+
+        <div class="card">
+            <div>Total Outstanding</div>
+            <div class="amount owing">
+                ${{ "%.2f"|format(total_outstanding) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Student Fee Balances</h2>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Student Name</th>
+                        <th>Class</th>
+                        <th>Term</th>
+                        <th>Year</th>
+                        <th>Expected ($)</th>
+                        <th>Paid ($)</th>
+                        <th>Outstanding ($)</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for fee in fees %}
+                    <tr>
+                        <td>{{ fee.student_id }}</td>
+                        <td>{{ fee.first_name }} {{ fee.last_name }}</td>
+                        <td>{{ fee.class_name }}</td>
+                        <td>{{ fee.term }}</td>
+                        <td>{{ fee.academic_year }}</td>
+                        <td>{{ "%.2f"|format(fee.amount_due) }}</td>
+                        <td>{{ "%.2f"|format(fee.total_paid) }}</td>
+                        <td class="{% if fee.outstanding > 0 %}owing{% else %}cleared{% endif %}">
+                            {{ "%.2f"|format(fee.outstanding) }}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8">
+                            No expected fees have been recorded yet.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
